@@ -46,17 +46,31 @@ All steps are described int this document and a screencast that shows the proces
 
 
 ## Project Set Up and Installation
-*OPTIONAL:* If your project has any special installation steps, this is where you should put it. To turn this project into a professional portfolio project, you are encouraged to explain how to set up this project in AzureML.
+To run this project you will neeed an Azure ML workspace or al local development enviroment (like Anaconda) with the following libraries installed:
+
+- Numpy and Pandas — for data handling and processing
+- PyTorch and Torchvision — for machine learning functions
+- Matplotlib — for data visualization
 
 ## Dataset
-The [American Sign Language MNIST Dataset from Kaggle](https://www.kaggle.com/datamunge/sign-language-mnist) is used for this project. This dataset is a similar tp the original MNIST dataset:  each training and test case consists of a numerical label associated with a letter(0 corresponds to A and Z corrispond to 25) and a grayscale 28x28 pixel image. However, there is no label correspondence to the letter J (9) and Z (25) due to the motion required to symbolize those letters. In toal there are 27,455 training cases and 7,172 tests cases in this dataset.
+The [American Sign Language MNIST Dataset from Kaggle](https://www.kaggle.com/datamunge/sign-language-mnist) is used for this project. 
 
+![MNIST ASL Dataset](datasets/sign-language-mnist/amer_sign3.png)
 
 ### Overview
 *TODO*: Explain about the data you are using and where you got it from.
 
+This dataset is a similar tp the original MNIST dataset:  each training and test case consists of a numerical label associated with a letter(0 corresponds to A and Z corrispond to 25) and a grayscale 28x28 pixel image. 
+
+There is no label correspondence to the letter J (9) and Z (25) due to the motion required to symbolize those letters. 
+
+In total there are 27,455 training cases and 7,172 tests cases in this dataset.
+
+
 ### Task
 *TODO*: Explain the task you are going to be solving with this dataset and the features you will be using for it.
+
+
 
 ### Access
 *TODO*: Explain how you are accessing the data in your workspace.
