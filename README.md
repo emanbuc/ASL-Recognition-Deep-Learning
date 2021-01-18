@@ -33,8 +33,6 @@ In this demo project we will create two different models to accomplish  the firs
   - [Model Deployment](#model-deployment)
   - [Screen Recording](#screen-recording)
   - [Standout Suggestions](#standout-suggestions)
-  - [Resources](#resources)
-    - [ONIXX on the edge (Raspeberry PI)](#onixx-on-the-edge-raspeberry-pi)
 
 ## Project Workflow
 
@@ -123,41 +121,4 @@ In total there are 27,455 training cases and 7,172 tests cases in this dataset.
 - Use [Dataset Monitor](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-monitor-datasets?tabs=python) to detect data drift
 - Publish a pipeline for automatic model re-training
 - 
-
-
-
-## Resources
-
-- https://www.researchgate.net/publication/337464551_Image_and_Ultrasonic_Sensor_Fusion_for_Object_Size_Detection
-- https://machinelearningmastery.com/object-recognition-with-deep-learning/
-- http://image-net.org/challenges/LSVRC/
-- https://www.kaggle.com/c/imagenet-object-localization-challenge/overview/description
-- https://www.researchgate.net/publication/345343092_Moving_Object_Detection_Using_Ultrasonic_Radar_with_Proper_Distance_Direction_and_Object_Shape_Analysis
-- https://www.intorobotics.com/object-detection-hc-sr04-arduino-millis/
-- https://www.intorobotics.com/interfacing-programming-ultrasonic-sensors-tutorials-resources/
-- https://www.intorobotics.com/8-tutorials-to-solve-problems-and-improve-the-performance-of-hc-sr04/
-- http://howtomechatronics.com/projects/arduino-radar-project/
-- https://www.instructables.com/Improve-Ultrasonic-Range-Sensor-Accuracy/
-- https://www.hackster.io/graham_chow/spread-spectrum-phased-array-sonar-018e22
-- https://www.sciencedirect.com/science/article/abs/pii/S0921889001001269
-- https://cdn.intechopen.com/pdfs/37176/InTech-Shape_recognition_and_position_measurement_of_an_object_using_an_ultrasonic_sensor_array.pdf
-- https://www.mdpi.com/1424-8220/20/2/414/htm
-
-### ONIXX on the edge (Raspeberry PI)
-
-https://www.henkboelman.com/articles/running-win-ml-on-the-raspberry-pi/
-
-https://qengineering.eu/deep-learning-software-for-raspberry-pi-and-alternatives.html
-
-https://qengineering.eu/deep-learning-examples-on-raspberry-32-64-os.html
-
-https://microsoft.github.io/ai-at-edge/docs/onnx/
-
-https://microsoft.github.io/ai-at-edge/docs/rpi_buster/
-
-https://medium.com/microsoftazure/the-seeing-raspberry-pi-3d66afc4a536
-
-https://www.henkboelman.com/articles/running-win-ml-on-the-raspberry-pi/
-
-
 
