@@ -1,13 +1,26 @@
 # American Sign Language Recognition with Deep Learning
 
-In this project, we will create two models: one using Azure Automated ML (_AutoML_ from now on) and one customized model whose hyperparameters are tuned using HyperDrive. Then we will compare the performance of both the models and deploy the best performing model as web service using AzureML.
+Sign languages are a group a communication languages that use a combination of manual articulations in combination with non-manual elements to convey messages. There are different sign language with variability in hand shape, motion profile, and position of the hand, face, and body parts contributing to each sign. Each country generally has its own native sign language, and some have more than one: the current edition of Ethnologue lists 144 sign languages.
 
-![img](media/project_workflow.png)
+The simplest class of sign languages, know as fingerspelling systems is limited to a collection of manual sign that representing the symbol of an alphabet.
 
-All steps are described int this document and a screencast that shows the processs and the final working ML application is provided.
+Sign language recognition and translation is one of the application areas of human computer interaction (HCI) where signs are recognized and then translated and converted to text or voice and at symbol, word or sentence level
 
+### The Sign Language Recognition Problem
+The general problem include three different tasks:
+
+1. static o continuous letter/number gesture recognition (classification problem)
+2. static or continuous single word recognition (classification problem)
+3. sentence level sign language recognition (Natural Language Processing problem)
+
+In this demo project we will create two different models to accomplish  the first task.
+
+## Table Of Contentens
 
 - [American Sign Language Recognition with Deep Learning](#american-sign-language-recognition-with-deep-learning)
+    - [The Sign Language Recognition Problem](#the-sign-language-recognition-problem)
+  - [Table Of Contentens](#table-of-contentens)
+  - [Project Workflow](#project-workflow)
   - [Project Set Up and Installation](#project-set-up-and-installation)
   - [Dataset](#dataset)
     - [Overview](#overview)
@@ -22,6 +35,15 @@ All steps are described int this document and a screencast that shows the proces
   - [Standout Suggestions](#standout-suggestions)
   - [Resources](#resources)
     - [ONIXX on the edge (Raspeberry PI)](#onixx-on-the-edge-raspeberry-pi)
+
+## Project Workflow
+
+In this project, we will create two models: one using Azure Automated ML (_AutoML_ from now on) and one customized model whose hyperparameters are tuned using HyperDrive. Then we will compare the performance of both the models and deploy the best performing model as web service using AzureML.
+
+![img](media/project_workflow.png)
+
+All steps are described int this document and a screencast that shows the processs and the final working ML application is provided.
+
 
 ## Project Set Up and Installation
 *OPTIONAL:* If your project has any special installation steps, this is where you should put it. To turn this project into a professional portfolio project, you are encouraged to explain how to set up this project in AzureML.
