@@ -1,6 +1,6 @@
 # American Sign Language Recognition with Deep Learning
 
-Sign languages are a group a communication languages that use a combination of manual articulations in combination with non-manual elements to convey messages. There are different sign language with variability in hand shape, motion profile, and position of the hand, face, and body parts contributing to each sign. Each country generally has its own native sign language, and some have more than one: the current edition of Ethnologue lists 144 sign languages.
+Sign languages are a group a communication languages that use a combination of manual articulations in combination with non-manual elements to convey messages. There are different sign language with variability in hand shape, motion profile, and position of the hand, face, and body parts contributing to each sign. Each country generally has its own native sign language, and some have more than one: the current edition of [Ethnologue](https://www.ethnologue.com/subgroups/sign-language) lists 144 sign languages.
 
 The simplest class of sign languages, know as fingerspelling systems is limited to a collection of manual sign that representing the symbol of an alphabet.
 
@@ -15,11 +15,11 @@ The general problem include three different tasks:
 
 In this demo project we will create two different models to accomplish  the first task.
 
-## Table Of Contentens
+## Table Of Contents
 
 - [American Sign Language Recognition with Deep Learning](#american-sign-language-recognition-with-deep-learning)
     - [The Sign Language Recognition Problem](#the-sign-language-recognition-problem)
-  - [Table Of Contentens](#table-of-contentens)
+  - [Table Of Contents](#table-of-contents)
   - [Project Workflow](#project-workflow)
   - [Project Set Up and Installation](#project-set-up-and-installation)
   - [Dataset](#dataset)
@@ -49,6 +49,8 @@ All steps are described int this document and a screencast that shows the proces
 *OPTIONAL:* If your project has any special installation steps, this is where you should put it. To turn this project into a professional portfolio project, you are encouraged to explain how to set up this project in AzureML.
 
 ## Dataset
+The [American Sign Language MNIST Dataset from Kaggle](https://www.kaggle.com/datamunge/sign-language-mnist) is used for this project. This dataset is a similar tp the original MNIST dataset:  each training and test case consists of a numerical label associated with a letter(0 corresponds to A and Z corrispond to 25) and a grayscale 28x28 pixel image. However, there is no label correspondence to the letter J (9) and Z (25) due to the motion required to symbolize those letters. In toal there are 27,455 training cases and 7,172 tests cases in this dataset.
+
 
 ### Overview
 *TODO*: Explain about the data you are using and where you got it from.
