@@ -46,22 +46,38 @@ All steps are described int this document and a screencast that shows the proces
 
 
 ## Project Set Up and Installation
-To run this project you will neeed an Azure ML workspace or al local development enviroment (like Anaconda) with the following libraries installed:
+To run this project you will neeed an Azure ML workspace.
+The provided Jupyter notebboks can be executed in local development environment or inside Azure Machine Learning Studio.
+
+In the local development enviroment with the following libraries installed:
 
 - Numpy and Pandas — for data handling and processing
 - PyTorch and Torchvision — for machine learning functions
 - Matplotlib — for data visualization
+- Azure ML SDK
+
+
+```
+!conda install numpy pytorch torchvision cpuonly -c pytorch -y
+!pip install matplotlib --upgrade --quiet
+!pip install azureml-sdk
+```
+
+The custom model can also be trained running the notebbok inside AzureML workspace. 
 
 ## Dataset
-The [American Sign Language MNIST Dataset from Kaggle](https://www.kaggle.com/datamunge/sign-language-mnist) is used for this project. 
+The [American Sign Language MNIST Dataset from Kaggle](https://www.kaggle.com/datamunge/sign-language-mnist) is used for this project. A copy of the dataset 
 
 ![MNIST ASL Dataset](datasets/sign-language-mnist/amer_sign3.png)
 
 ### Overview
-*TODO*: Explain about the data you are using and where you got it from.
 
-This dataset is a similar tp the original MNIST dataset:  each training and test case consists of a numerical label associated with a letter(0 corresponds to A and Z corrispond to 25) and a grayscale 28x28 pixel image. 
+This dataset is in tabular format and is similar to the original MNIST dataset.
 
+Each row in the csv file represents a label and a single 28x28 pixel greyscale image represented using 784 pixel values ranging from 0-255
+
+The label in the dataset is a number ranging from 0-25 associated with its english letter equivalent (e.g. 0 = a)
+ 
 There is no label correspondence to the letter J (9) and Z (25) due to the motion required to symbolize those letters. 
 
 In total there are 27,455 training cases and 7,172 tests cases in this dataset.
