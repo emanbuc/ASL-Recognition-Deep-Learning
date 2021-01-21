@@ -53,6 +53,7 @@ In the local development enviroment with the following libraries installed:
 - PyTorch and Torchvision — for machine learning functions
 - Matplotlib — for data visualization
 - Azure ML SDK
+- Azure ML widget extention installed (if notebook is executed from Visual Studio Code)
 
 
 ```
