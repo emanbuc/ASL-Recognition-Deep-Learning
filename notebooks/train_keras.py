@@ -36,7 +36,7 @@ model.add(Dense(y_train.shape[1],activation=tf.nn.softmax))
 
 model.compile(loss=keras.losses.categorical_crossentropy,
               #optimizer=keras.optimizers.Adadelta(),
-              optimizer=keras.optimizers.Adam,
+              optimizer=keras.optimizers.Adam(),
               metrics=['accuracy'])
 
 model.fit(X_train, y_train,
