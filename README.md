@@ -83,7 +83,6 @@ In this demo project we are going to create two different models to accomplish t
 
 
 ### Access
-*TODO*: Explain how you are accessing the data in your workspace.
 The MNIST Sing Language Dataset is in tabular format (like the original MNIST dataset). Each row in the csv file represents a label and a single 28x28 pixel greyscale image represented using 784 pixel values ranging from 0-255.
 
 The workspace dataset has been created from the original CSV file using TabularDatasetFactory class and registerd into the workspace.
@@ -159,7 +158,27 @@ Whether to enable or disable enforcing the ONNX-compatible models. Must be True 
 ### Results
 *TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
 
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
+AutoML generated many different models with good performance . Some of them achive 100% accuracy scopre.
+
+![aml_run_details_widget](./media/aml_run_details_widget.png)
+
+
+
+![aml_run_details_widget02](./media/aml_run_details_widget02.png)
+
+
+
+The best model is a "Voting Ensemble"
+
+![aml-automl-trained-model](./media/aml-automl-trained-model.png)
+
+![automl-best-model-metrics02](./media/automl-best-model-metrics02.png)
+
+![automl-best-model-metrics](./media/automl-best-model-metrics.png)
+
+
+
+A copy of the best model is archivied in folder [models/AutoML05929722a48.zip]()
 
 ## Hyperparameter Tuning
 *TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
@@ -168,7 +187,13 @@ Whether to enable or disable enforcing the ONNX-compatible models. Must be True 
 ### Results
 *TODO*: What are the results you got with your model? What were the parameters of the model? How could you have improved it?
 
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
+After Hyperparameters tuning the trined model achive 100% accuracy
+
+![AML-experiment_with_hyperdrive02](./media/AML-experiment_with_hyperdrive02.png)
+
+*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.![run_details_with_hyperdrive](./media/run_details_with_hyperdrive.png)
+
+
 
 ## Model Deployment
 *TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
