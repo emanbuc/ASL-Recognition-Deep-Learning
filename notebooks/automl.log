@@ -1,0 +1,34 @@
+2021-01-22 17:39:20.120 - INFO - 9884 - azureml.train.automl.run._log_activity:54 - ActivityStarted: GetOutput
+2021-01-22 17:39:20.164 - INFO - 9884 - azureml.train.automl.run._log_activity:54 - ActivityStarted: GetOutput
+2021-01-22 17:39:20.194 - INFO - 9884 - azureml.train.automl.run._log_activity:54 - ActivityStarted: GetChildren
+2021-01-22 17:39:22.269 - INFO - 9884 - azureml.train.automl.run._log_activity:88 - ActivityCompleted: Activity=GetChildren, HowEnded=Success, Duration=2074.64[ms]
+2021-01-22 17:39:22.269 - INFO - 9884 - azureml.train.automl.run._log_activity:88 - ActivityCompleted: Activity=GetOutput, HowEnded=Success, Duration=2104.64[ms]
+2021-01-22 17:39:22.270 - INFO - 9884 - azureml.train.automl._model_download_utilities._log_activity:54 - ActivityStarted: DownloadModel
+2021-01-22 17:40:08.810 - CRITICAL - 9884 - azureml.train.automl._model_download_utilities.log_traceback:224 - Type: Unclassified
+Class: ModuleNotFoundError
+Message: No module named 'azureml.train.automl.runtime'
+Traceback:
+  File "_model_download_utilities.py", line 151, in _load_automl_model
+    import azureml.train.automl.runtime
+
+ExceptionTarget: Unspecified
+2021-01-22 17:40:08.812 - WARNING - 9884 - azureml.train.automl._model_download_utilities._download_automl_model:97 - The model you attempted to retrieve requires 'azureml-train-automl-runtime' to be installed at '==1.20.0'. Please install 'azureml-train-automl-runtime==1.20.0' (e.g. `pip install azureml-train-automl-runtime==1.20.0`) and then rerun the previous command.
+2021-01-22 17:40:08.831 - INFO - 9884 - azureml.train.automl._model_download_utilities._log_activity:88 - ActivityCompleted: Activity=DownloadModel, HowEnded=Success, Duration=46561.2[ms]
+2021-01-22 17:40:08.834 - INFO - 9884 - azureml.train.automl.run._log_activity:88 - ActivityCompleted: Activity=GetOutput, HowEnded=Success, Duration=48714.49[ms]
+2021-01-22 17:45:50.685 - INFO - 9884 - azureml.train.automl.run._log_activity:54 - ActivityStarted: GetOutput
+2021-01-22 17:45:50.717 - INFO - 9884 - azureml.train.automl.run._log_activity:54 - ActivityStarted: GetOutput
+2021-01-22 17:45:50.740 - INFO - 9884 - azureml.train.automl.run._log_activity:54 - ActivityStarted: GetChildren
+2021-01-22 17:45:52.777 - INFO - 9884 - azureml.train.automl.run._log_activity:88 - ActivityCompleted: Activity=GetChildren, HowEnded=Success, Duration=2036.81[ms]
+2021-01-22 17:45:52.777 - INFO - 9884 - azureml.train.automl.run._log_activity:88 - ActivityCompleted: Activity=GetOutput, HowEnded=Success, Duration=2060.36[ms]
+2021-01-22 17:45:52.780 - INFO - 9884 - azureml.train.automl._model_download_utilities._log_activity:54 - ActivityStarted: DownloadModel
+2021-01-22 17:46:34.413 - CRITICAL - 9884 - azureml.train.automl._model_download_utilities.log_traceback:224 - Type: Unclassified
+Class: ModuleNotFoundError
+Message: No module named 'azureml.train.automl.runtime'
+Traceback:
+  File "_model_download_utilities.py", line 151, in _load_automl_model
+    import azureml.train.automl.runtime
+
+ExceptionTarget: Unspecified
+2021-01-22 17:46:34.421 - WARNING - 9884 - azureml.train.automl._model_download_utilities._download_automl_model:97 - The model you attempted to retrieve requires 'azureml-train-automl-runtime' to be installed at '==1.20.0'. Please install 'azureml-train-automl-runtime==1.20.0' (e.g. `pip install azureml-train-automl-runtime==1.20.0`) and then rerun the previous command.
+2021-01-22 17:46:34.450 - INFO - 9884 - azureml.train.automl._model_download_utilities._log_activity:88 - ActivityCompleted: Activity=DownloadModel, HowEnded=Success, Duration=41670.06[ms]
+2021-01-22 17:46:34.451 - INFO - 9884 - azureml.train.automl.run._log_activity:88 - ActivityCompleted: Activity=GetOutput, HowEnded=Success, Duration=43765.81[ms]
