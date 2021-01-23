@@ -15,21 +15,23 @@ All steps are described in this document. A screencast that shows the processs a
 ## Table Of Contents
 
 - [American Sign Language Recognition with Deep Learning](#american-sign-language-recognition-with-deep-learning)
-    - [The Sign Language Recognition Problem](#the-sign-language-recognition-problem)
   - [Table Of Contents](#table-of-contents)
-  - [Project Workflow](#project-workflow)
   - [Project Set Up and Installation](#project-set-up-and-installation)
+    - [Run from Visual Studio Code](#run-from-visual-studio-code)
   - [Dataset](#dataset)
-    - [Overview](#overview)
-    - [Task](#task)
-    - [Access](#access)
+    - [Dataset format](#dataset-format)
+    - [The Sign Language Recognition Task](#the-sign-language-recognition-task)
+    - [Data Access](#data-access)
   - [Automated ML](#automated-ml)
     - [Results](#results)
   - [Hyperparameter Tuning](#hyperparameter-tuning)
+    - [Model](#model)
+    - [Hyperparameter  Config](#hyperparameter--config)
     - [Results](#results-1)
   - [Model Deployment](#model-deployment)
+    - [How To Deploy the model](#how-to-deploy-the-model)
+    - [Test the model](#test-the-model)
   - [Screen Recording](#screen-recording)
-  - [Standout Suggestions](#standout-suggestions)
 
 
 ## Project Set Up and Installation
@@ -71,11 +73,11 @@ The [American Sign Language MNIST Dataset from Kaggle](https://www.kaggle.com/da
 
 ### Dataset format
 
-This dataset is in tabular format and is similar to the [original MNIST dataset]([MNIST Original | Kaggle](https://www.kaggle.com/avnishnish/mnist-original)). Each row in the csv file represents a label and a single 28x28 pixel greyscale image represented using 784 pixel values ranging from 0-255.
+This dataset is in tabular format and is similar to the [original MNIST dataset](https://www.kaggle.com/avnishnish/mnist-original). Each row in the csv file has a label and 784 pixel values ranging from 0-255 rapresenting a single 28x28 pixel greyscale image.
 
-The label in the dataset is a number ranging from 0-25 associated with its english letter equivalent (e.g. 0 = a)
+The label in the dataset is a number ranging from 0-25 associated with its english letter equivalent (e.g. 0 = a, 1=b, 2=c, ...)
 
-There is no label correspondence to the letter J (9) and Z (25) due to the motion required to symbolize those letters. 
+There is no label correspondence to the letter J (9) and Z (25) due to the motion required to symbolize those letters in the sign language. 
 
 In total there are 27,455 training cases and 7,172 tests cases in this dataset.
 
@@ -113,9 +115,9 @@ df = ds.to_pandas_dataframe()
 ```
 
 ## Automated ML
-The *AutoML* configuration has tuned in order to be compatible with the 2 hour timeout limit we have for the lab. 
+The *AutoML* configuration has tuned in order to be compatible with the 2 hour timeout limit we have for lab activity duration. 
 
-For the training dataset we are using the _AutoML_ requires an experiment timeout greater than 1 hour.  A 1.1 hour value was used together with *iteration_timeout_minutes* and *enable_early_stopping* to control the duration of the experiment.
+For the training dataset we are using the _AutoML_ requires an experiment timeout greater than 1 hour.  A 1.1 hour value was used together with *iteration_timeout_minutes* set to 10 and *enable_early_stopping* = true to control the duration of the experiment.
 
 To assure that only models compatible with ONNY are used _enable_onnx_compatible_models_ is set to True .
 
@@ -133,7 +135,7 @@ automl_settings = {
   "enable_onnx_compatible_models": True
 }
 ```
-_Accuracy_ (ratio of predictions that exactly match the true class labels) is selected as primary metric for model scoring and the a remote compute cluster (up to 10 node, GPU based ) is selected as computation target.  _AmlCompute clusters_ support one interation running per node so  "max_concurrent_iterations" is set to 10 to match the cluster capacity.
+_Accuracy_ (ratio of predictions that exactly match the true class labels) is selected as primary metric for model scoring and the a remote GPU _AmlCompute Cluster_ with 10 node is selected as computation target.  _AmlCompute clusters_ support one interation running per node so  "max_concurrent_iterations" is set to 10 to match the cluster capacity.
 
 ```python
  automl_config = AutoMLConfig(
@@ -154,7 +156,7 @@ _Accuracy_ (ratio of predictions that exactly match the true class labels) is se
 ```
 
 ### Results
-The AutoML run generated many different models with good performance. Some of them achieve 100% accuracy score. The proges of the run can monitored from Rundetails Widget (both from web interface and from local SDK)
+The AutoML run generated many different models with good performance. Some of them achieve 100% accuracy score. The progess of the AutoML run can monitored with _Rundetails_ Widget (both from web interface and from local SDK)
 
 ![aml_run_details_widget](./media/aml_run_details_widget.png)
 
@@ -164,16 +166,14 @@ The AutoML run generated many different models with good performance. Some of th
 
 
 
-The best performing model is a simple "Logistic Regression"  with a 100% accuracy score. The [trained model](./models/AutoMLcd06aae969_run55.zip) is provided in the models folder. The full list of the model is compiled as the run finished.  
+The best performing model is a simple "Logistic Regression"  with a 100% accuracy score. The [trained model](./models/AutoMLcd06aae969_run55.zip) is provided in the models folder. The full list of the model is shown as the run finished.  
 
 ![automl_best_model_details](./media/automl_best_model_details.png)
 
 ![AutoML Model List](./media/automl55-models.png)
 
 ## Hyperparameter Tuning
-*TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
-
-The custom model was created with Keras using a common deep learning CNN architecture for image recognition task.  The model training script take some parameters as input that can be used for hyper-parameters tuning.
+The custom model was created with Keras using CNN architecture frequntly used for deep learning image recognition task.  The model training take four input parameters that can be used for hyper-parameters tuning.
 
 ### Model
 
@@ -216,39 +216,118 @@ param_sampling = RandomParameterSampling({
 ```
 
 ### Results
-*TODO*: What are the results you got with your model? What were the parameters of the model? How could you have improved it?
 
+During the HyperDrive run many parameters configuration that achieve 100% accuracy on validation dataset has been found.
 The tuning process can be monitored with RunDetails widget
 
 ![run_details_with_hyperdrive](./media/run_details_with_hyperdrive.png)
 
-After Hyperparameters tuning found many parameters configuration that achieve 100% accuracy on validation dataset.
-
-![hyperdrive_best_model](./media\hyperdrive_best_model.png)
-
 ![AML-experiment_with_hyperdrive02](./media/AML-experiment_with_hyperdrive02.png)
 
-.![hyperdrive_child_run_output](./media/hyperdrive_child_run_output.png)
+![hyperdrive_child_run_output](./media/hyperdrive_child_run_output.png)
 
-
+After the run finished the "best run" output files are retrived and the model is registerd.
+![hyperdrive_best_model](./media/hyperdrive_best_model.png)
 
 ## Model Deployment
-*TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
+The best model from one of the AutoML run is a simple "Logistic Regression" that achive 100% accuracy score. There are many other models from AutoML run and from hyperdrive runs with top performance score, but the logistic regression is by far the more simpler and light weight model among the top performer.
 
-Other run of AutoML experiment produced different and more complex model. The logistic regression model has a better score and perform well also with testing data  .... 
+The trained model with scoring script [is provided in models folder](./models/AutoMLcd06aae969_run55.zip).
 
+The (zipped) size of the xgboost model is over 30MB, a CNN model is about 17MB when the logistic regression model size is only 0.8MB.
+Simple e lightweight models should be preferred if there are no performance penality. 
+
+The robusteness of the model has been test with some test case from test dataset that are non be used during the trainig process. The 100% accuracy is confirmed also with test cases from test dataset.
+
+### How To Deploy the model
+To deploy a model as web service in Azure ML there a _InferenceConfig_ object must be created with runtime environment and scoring script.
+
+```Python
+# inference config
+from azureml.core.environment import Environment
+from azureml.core.model import InferenceConfig, Model
+
+
+env = Environment.get(ws, "AzureML-AutoML").clone("my_env")
+
+for pip_package in ["scikit-learn"]:
+    env.python.conda_dependencies.add_pip_package(pip_package)
+
+inference_config = InferenceConfig(entry_script='./outputs/scoring_file_v_1_0_0.py',
+                                    environment=env)
+```
+
+With a InferenceConfig defined the model can be deployed in a local o remote compute target. The deploy process will create the web service endpoint.
+
+
+```Python
+from azureml.core.webservice import AciWebservice, AksWebservice, LocalWebservice
+from azureml.core.model import InferenceConfig, Model
+
+#For remote compute target
+deployment_config = AciWebservice.deploy_configuration(cpu_cores = 1, memory_gb = 1)
+
+#For local compute target
+#deployment_config = LocalWebservice.deploy_configuration(port=8890)
+
+from azureml.core.webservice import LocalWebservice, Webservice
+service = Model.deploy(ws, "asl-automl-004", [model], inference_config, deployment_config)
+service.wait_for_deployment(show_output = True)
+print(service.state)
+```
+The deployment process can take some time (up to 10 minutes). When completed the service state is "Healty".
+
+![deployed services](./media/service_running_state.png)
+
+### Test the model
+A deployed model can be test comsuming the public scoring endpoint. There are many test case available in the test dataset.
+
+```
+test_data = pd.read_csv("https://github.com/emanbuc/ASL-Recognition-Deep-Learning/raw/main/datasets/sign-language-mnist/sign_mnist_test.csv")
+
+#Take the first 10 test case
+X_test=test_data.iloc[1:9,1:785]
+actualLabels= test_data.iloc[1:9,0]
+```
+
+
+Please note that the test data must be trasposed to match the model input format.
+
+```
+testdict= X_test.to_dict(orient="index")
+inputList=(testdict[1],testdict[2],testdict[3],testdict[4],testdict[5],testdict[6],testdict[7],testdict[8],testdict[9])
+```
+
+Now we can send the test cases to the service in JSON format
+
+```Python
+data = {"data": inputList}
+# Convert to JSON string
+input_data = json.dumps(data)
+```
+
+```Python
+scoring_uri = 'http://3aa494b3-8edd-4467-8f8e-4a6e77466b04.southcentralus.azurecontainer.io/score'
+# If the service is authenticated, set the key or token
+key = ''
+
+# Set the content type
+headers = {'Content-Type': 'application/json'}
+# If authentication is enabled, set the authorization header
+headers['Authorization'] = f'Bearer {key}'
+
+# Make the request and display the response
+resp = requests.post(scoring_uri, input_data, headers=headers)
+print("predicted labels: ")
+print(resp.json())
+```
+
+The prediction made by the deployd model was 100% accurate.
+
+![model result](./media/response_from_deployed_model.png)
 
 
 ## Screen Recording
-*TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
-- A working model
-- Demo of the deployed  model
-- Demo of a sample request sent to the endpoint and its response
+[Screen recording - https://youtu.be/PjK1L8Wxd0M](https://youtu.be/PjK1L8Wxd0M)
 
-## Standout Suggestions
-*TODO (Optional):* This is where you can provide information about any standout suggestions that you have attempted.
-
-- Use [Dataset Monitor](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-monitor-datasets?tabs=python) to detect data drift
-- Publish a pipeline for automatic model re-training
-- 
 
