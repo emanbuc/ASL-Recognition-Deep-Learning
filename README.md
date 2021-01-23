@@ -1,16 +1,16 @@
+
+
 # American Sign Language Recognition with Deep Learning
 
 Sign languages are a group a communication languages that use a combination of manual articulations in combination with non-manual elements to convey messages. There are different sign language with variability in hand shape, motion profile, and position of the hand, face, and body parts contributing to each sign. Each country generally has its own native sign language, and some have more than one: the current edition of [Ethnologue](https://www.ethnologue.com/subgroups/sign-language) lists 144 sign languages.
 
-The simplest class of sign languages, know as fingerspelling systems is limited to a collection of manual sign that representing the symbol of an alphabet.
+The simplest class of sign languages, know as fingerspelling systems is limited to a collection of manual sign that representing the symbol of an alphabet. In this project we are going to create two different models to accomplish the letter/number gesture recognition task from static images. 
 
-Sign language recognition and translation is one of the application areas of human computer interaction (HCI) where signs are recognized and then translated and converted to text or voice and at symbol, word or sentence level
-
-In this demo project we are going to create two different models to accomplish the letter/number gesture recognition task from static image. For the first model we will use Azure Automated ML (_AutoML_ from now on) and then we will train a custom model whose hyperparameters are tuned using HyperDrive. Then we will compare the performance of both the models and we will deploy the best performing model as web service using Azure ML SDK.
+For the first model we will use Azure Automated ML (_AutoML_). We will also develop and train a second custom model with Kera/Tensorflow framework whose hyperparameters are tuned using  _HyperDrive_ from _Azure Machine Learning_. Then we will compare the performance of both the models and we will deploy the best performing model as web service using Azure ML SDK.
 
 ![img](media/project_workflow.png)
 
-All steps are described int this document and a screencast that shows the processs and the final working ML application is provided.
+All steps are described in this document. A screencast that shows the processs and the final working ML application is provided together with Jupyter notebooks, Python scripts and trained model. 
 
 ## Table Of Contents
 
@@ -33,37 +33,45 @@ All steps are described int this document and a screencast that shows the proces
 
 
 ## Project Set Up and Installation
-To run this project you will neeed an Azure ML workspace.
-The provided Jupyter notebboks can be executed in local development environment or inside Azure Machine Learning Studio.
+To run this project you will need an Azure ML workspace.
+The provided Jupyter notebooks can be executed in local development environment with _AzureML SDK installed_ or uploaded in _Azure Machine Learning Studio_ and executed in a remote compute instance. For model training a remote compute cluster in _Azure ML_  is used.
 
-In the local development enviroment with the following libraries installed:
+The following libraries must be installed in the development environment:
 
 - Numpy and Pandas — for data handling and processing
-- PyTorch and Torchvision — for machine learning functions
+- SciKitLearn, TensorFlow , Kera— for machine learning functions
 - Matplotlib — for data visualization
 - Azure ML SDK
-- Azure ML widget extention installed (if notebook is executed from Visual Studio Code)
+
+Run the following install get all required libraries:
 
 
-```
-conda install numpy pytorch torchvision cpuonly -c pytorch -y
-pip install matplotlib --upgrade --quiet
+```bash
 pip install azureml-sdk
 pip install azureml-sdk[notebooks]
+pip install tensorflow
+pip install keras
+pip install matplotlib
 ```
 
-The custom model can also be trained running the notebbok inside AzureML workspace. 
+###  Run from Visual Studio Code
+
+To run the notebook from Visual Studio Code you can install the following extensions:
+
+- Azure Machine Learning (ms-toolsai.vscode-ai)
+- Jupyter (ms-toolsai.jupyter) 
 
 ## Dataset
-The [American Sign Language MNIST Dataset from Kaggle](https://www.kaggle.com/datamunge/sign-language-mnist) is used for this project. A copy of the dataset 
+The [American Sign Language MNIST Dataset from Kaggle](https://www.kaggle.com/datamunge/sign-language-mnist) is used for this project. A copy of the dataset is included into [Datasets](./datasets) folder of the the repository. The dataset is made by two distinct collection of gray scale image:
 
-![MNIST ASL Dataset](datasets/sign-language-mnist/amer_sign3.png)
+- **sign_mnist_train**: for model training and validation
+- **sing_mnist_test**: for model testing. (Never used during model training, tuning and validation process)
 
-### Overview
+![MNIST ASL Dataset](./datasets/sign-language-mnist/amer_sign3.png)
 
-This dataset is in tabular format and is similar to the original MNIST dataset.
+### Dataset format
 
-Each row in the csv file represents a label and a single 28x28 pixel greyscale image represented using 784 pixel values ranging from 0-255
+This dataset is in tabular format and is similar to the [original MNIST dataset]([MNIST Original | Kaggle](https://www.kaggle.com/avnishnish/mnist-original)). Each row in the csv file represents a label and a single 28x28 pixel greyscale image represented using 784 pixel values ranging from 0-255.
 
 The label in the dataset is a number ranging from 0-25 associated with its english letter equivalent (e.g. 0 = a)
 
@@ -79,27 +87,37 @@ The general sign language recognition problem  include three different tasks:
 2. static or continuous single word recognition (classification problem)
 3. sentence level sign language recognition (Natural Language Processing problem)
 
-In this demo project we are going to create two different models to accomplish the letter/number gesture recognition task from static image. 
+In this demo project we are going to create two different models to accomplish the letter/number gesture recognition task from static images. 
 
 
-### Access
-The MNIST Sing Language Dataset is in tabular format (like the original MNIST dataset). Each row in the csv file represents a label and a single 28x28 pixel greyscale image represented using 784 pixel values ranging from 0-255.
-
-The workspace dataset has been created from the original CSV file using TabularDatasetFactory class and registerd into the workspace.
+### Data Access
+The dataset is uploaded into the the workspace creating a _tabular dataset_ from the original CSV file using _TabularDatasetFactory_ class and registered as  "sign-language-mnist".  Dataset is then converted to a _Pandas dataframe_ for every subsegment usage.
 
 ```python
+found = False
 key = "sign-language-mnist"
 description_text = "sign Language MNIST"
 
-datastore_path = "https://github.com/emanbuc/ASL-Recognition-Deep-Learning/raw/main/datasets/sign-language-mnist/sign_mnist_train/sign_mnist_train.csv"
+if key in ws.datasets.keys(): 
+    found = True
+    ds = ws.datasets[key] 
 
-ds = TabularDatasetFactory.from_delimited_files(path=datastore_path,header=True)       
-ds = ds.register(workspace=ws,name=key,description=description_text)
+if not found:
+    from azureml.data.dataset_factory import TabularDatasetFactory
+    datastore_path = "https://github.com/emanbuc/ASL-Recognition-Deep-Learning/raw/main/datasets/sign-language-mnist/sign_mnist_train/sign_mnist_train.csv"
+    ds = TabularDatasetFactory.from_delimited_files(path=datastore_path,header=True)       
+    #Register Dataset in Workspace
+    ds = ds.register(workspace=ws,name=key,description=description_text)
+
 df = ds.to_pandas_dataframe()
 ```
 
 ## Automated ML
-The follwing AutoML settings was used for the experiment
+The *AutoML* configuration has tuned in order to be compatible with the 2 hour timeout limit we have for the lab. 
+
+For the training dataset we are using the _AutoML_ requires an experiment timeout greater than 1 hour.  A 1.1 hour value was used together with *iteration_timeout_minutes* and *enable_early_stopping* to control the duration of the experiment.
+
+To assure that only models compatible with ONNY are used _enable_onnx_compatible_models_ is set to True .
 
 ```python
 automl_settings = {
@@ -113,12 +131,12 @@ automl_settings = {
   "max_concurrent_iterations": 10,
 
   "enable_onnx_compatible_models": True
-
 }
+```
+_Accuracy_ (ratio of predictions that exactly match the true class labels) is selected as primary metric for model scoring and the a remote compute cluster (up to 10 node, GPU based ) is selected as computation target.  _AmlCompute clusters_ support one interation running per node so  "max_concurrent_iterations" is set to 10 to match the cluster capacity.
 
-
-
-automl_config = AutoMLConfig(
+```python
+ automl_config = AutoMLConfig(
 
   debug_log='automl_errors.log',
 
@@ -132,33 +150,11 @@ automl_config = AutoMLConfig(
 
   label_column_name='label',
 
-  **automl_settings)
+  **automl_settings) 
 ```
 
-**max_concurrent_iterations** : 10
-
-AmlCompute clusters support one interation running per node. For multiple AutoML experiment parent runs executed in parallel on a single AmlCompute cluster, the sum of the max_concurrent_iterations values for all experiments should be less than or equal to the maximum number of nodes. Otherwise, runs will be queued until nodes are available. Set to 10 as number of node in compute cluster.
-
-**experiment_timeout_hours**: 1.1
-
-Experiment must end before Lab timeout. Azure Machine Learning require  an experiment timeout greater than 1 hour  for the input dataset of this size. So the a value of 1.1 hour is used.
-
-**iteration_timeout_minutes** : 10
-
-Maximum time in minutes that each iteration can run for before it terminates. We are using a powerful GPU cluster to get fast iteration.   10 minutes limit has been set to avoid Lab timeout.
-
-**enable_early_stopping**: true
-
-Whether to enable early termination if the score is not improving in the short term after the first 20 iteration.. Set to True to avoid waste time. We don't need to try every possible iteration in this demo experiment and we must avoid the Lab timeout.
-
-**enable_onnx_compatible_models**: True
-
-Whether to enable or disable enforcing the ONNX-compatible models. Must be True to anable deploy on ONNX runtime.
-
 ### Results
-*TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
-
-AutoML generated many different models with good performance . Some of them achive 100% accuracy scopre.
+The AutoML run generated many different models with good performance. Some of them achieve 100% accuracy score. The proges of the run can monitored from Rundetails Widget (both from web interface and from local SDK)
 
 ![aml_run_details_widget](./media/aml_run_details_widget.png)
 
@@ -168,35 +164,80 @@ AutoML generated many different models with good performance . Some of them achi
 
 
 
-The best model is a "Voting Ensemble"
+The best performing model is a simple "Logistic Regression"  with a 100% accuracy score. The [trained model](./models/AutoMLcd06aae969_run55.zip) is provided in the models folder. The full list of the model is compiled as the run finished.  
 
-![aml-automl-trained-model](./media/aml-automl-trained-model.png)
+![automl_best_model_details](./media/automl_best_model_details.png)
 
-![automl-best-model-metrics02](./media/automl-best-model-metrics02.png)
-
-![automl-best-model-metrics](./media/automl-best-model-metrics.png)
-
-
-
-A copy of the best model is archivied in folder [models/AutoML05929722a48.zip]()
+![AutoML Model List](./media/automl55-models.png)
 
 ## Hyperparameter Tuning
 *TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
 
+The custom model was created with Keras using a common deep learning CNN architecture for image recognition task.  The model training script take some parameters as input that can be used for hyper-parameters tuning.
+
+### Model
+
+```python
+input_shape = (28,28, 1) # 28*28 = 784
+
+model = keras.Sequential()
+
+model.add(Conv2D(28, kernel_size=(3,3), input_shape=input_shape))
+
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Flatten()) # Flattening the 2D arrays for fully connected layers
+
+model.add(Dense(args.hidden, activation=tf.nn.relu))
+
+if args.dropout is not None and args.dropout<1:
+
+  model.add(Dropout(args.dropout))
+
+model.add(Dense(y_train.shape[1],activation=tf.nn.softmax))
+```
+
+### Hyperparameter  Config
+
+For Hyperparameter experiment we have to stay into total 2 hours lab timeout limit so only a limited number of run was possible.
+
+In order to assure a quick execution time the _choice_ sampling method is used. Also a A *MedianStoppingPolicy* is added as termination policy together with  *max_total_runs* limit of 50. A remote GPU *AmlCluster* with 10 node is used as compute target and the *max_concurrent_runs* parameter match the cluster capacity.
+
+```python
+param_sampling = RandomParameterSampling({
+
+​     '--hidden': choice([50,100,200,300]),
+
+​     '--batch_size': choice([64,128]), 
+
+​     '--epochs': choice([3,5,10]),
+
+​     '--dropout': choice([0.5,0.8,1])})
+```
 
 ### Results
 *TODO*: What are the results you got with your model? What were the parameters of the model? How could you have improved it?
 
-After Hyperparameters tuning the trined model achive 100% accuracy
+The tuning process can be monitored with RunDetails widget
+
+![run_details_with_hyperdrive](./media/run_details_with_hyperdrive.png)
+
+After Hyperparameters tuning found many parameters configuration that achieve 100% accuracy on validation dataset.
+
+![hyperdrive_best_model](./media\hyperdrive_best_model.png)
 
 ![AML-experiment_with_hyperdrive02](./media/AML-experiment_with_hyperdrive02.png)
 
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.![run_details_with_hyperdrive](./media/run_details_with_hyperdrive.png)
+.![hyperdrive_child_run_output](./media/hyperdrive_child_run_output.png)
 
 
 
 ## Model Deployment
 *TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
+
+Other run of AutoML experiment produced different and more complex model. The logistic regression model has a better score and perform well also with testing data  .... 
+
+
 
 ## Screen Recording
 *TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
