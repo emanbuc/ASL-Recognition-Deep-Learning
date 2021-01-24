@@ -32,6 +32,7 @@ All steps are described in this document. A screencast that shows the processs a
     - [How To Deploy the model](#how-to-deploy-the-model)
     - [Test the model](#test-the-model)
   - [Screen Recording](#screen-recording)
+  - [Future Improvements](#future-improvements)
 
 
 ## Project Set Up and Installation
@@ -219,23 +220,29 @@ param_sampling = RandomParameterSampling({
 
 ### Results
 
-During the HyperDrive run many parameters configuration that achieve 100% accuracy on validation dataset has been found.
+During the HyperDrive run many parameters configuration that achieve a 100% accuracy on validation dataset has been found.
 The tuning process can be monitored with RunDetails widget
 
 ![run_details_with_hyperdrive](./media/run_details_with_hyperdrive.png)
 
 ![AML-experiment_with_hyperdrive02](./media/AML-experiment_with_hyperdrive02.png)
 
+The best run has been retrived  get_best_run_by_primary_metric() function of HyperDrive API. 
+
+```
+best_run = hyperdrive_run.get_best_run_by_primary_metric()
+```
+
+Log file produced by the run can be get from HyperDrive experiment to see more details. 
+
 ![hyperdrive_child_run_output](./media/hyperdrive_child_run_output.png)
 
-After the run finished the "best run" output files are retrived and the model is registerd and evaluated
+Then the model file is then downloaded, registered and evaluated
 ![hyperdrive_best_model](./media/hyperdrive_best_model.png)
 
 Keras model summary and confusion matrix
 
 ![keras model summary](./media/keras_model_summary.png)
-
-
 
 ![Keras model evaluation](./media/keras_model_evaluation.png)
 
@@ -340,4 +347,7 @@ The prediction made by the deployd model was 100% accurate.
 ## Screen Recording
 [Screen recording - https://youtu.be/PjK1L8Wxd0M](https://youtu.be/PjK1L8Wxd0M)
 
+## Future Improvements
+The model achive 100% on the training/test dataset, but do not generalize well with real world image.
 
+A more "realistic" training dataset should be used in order to create a useful application
