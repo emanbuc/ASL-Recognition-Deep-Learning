@@ -226,8 +226,16 @@ The tuning process can be monitored with RunDetails widget
 
 ![hyperdrive_child_run_output](./media/hyperdrive_child_run_output.png)
 
-After the run finished the "best run" output files are retrived and the model is registerd.
+After the run finished the "best run" output files are retrived and the model is registerd and evaluated
 ![hyperdrive_best_model](./media/hyperdrive_best_model.png)
+
+Keras model summary and confusion matrix
+
+![keras model summary](./media/keras_model_summary.png)
+
+
+
+![Keras model evaluation](./media/keras_model_evaluation.png)
 
 ## Model Deployment
 The best model from one of the AutoML run is a simple "Logistic Regression" that achive 100% accuracy score. There are many other models from AutoML run and from hyperdrive runs with top performance score, but the logistic regression is by far the more simpler and light weight model among the top performer.
