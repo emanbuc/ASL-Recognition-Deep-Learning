@@ -170,6 +170,8 @@ The best performing model is a simple "Logistic Regression"  with a 100% accurac
 
 ![automl_best_model_details](./media/automl_best_model_details.png)
 
+![automl model metrics](./media/automl_bestmodel_metrics.png)
+
 ![AutoML Model List](./media/automl55-models.png)
 
 ## Hyperparameter Tuning
