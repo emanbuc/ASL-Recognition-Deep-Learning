@@ -270,7 +270,7 @@ env = Environment.get(ws, "AzureML-AutoML").clone("my_env")
 for pip_package in ["scikit-learn"]:
     env.python.conda_dependencies.add_pip_package(pip_package)
 
-inference_config = InferenceConfig(entry_script='./outputs/scoring_file_v_1_0_0.py',
+inference_config = InferenceConfig(entry_script='./deploy/scoring_file_v_1_0_0.py',
                                     environment=env)
 ```
 
