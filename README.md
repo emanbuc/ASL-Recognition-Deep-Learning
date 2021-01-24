@@ -169,7 +169,7 @@ The AutoML run generated many different models with good performance. Some of th
 
 The best performing model is a simple "Logistic Regression"  with a 100% accuracy score. The [trained model](./models/AutoMLcd06aae969_run55.zip) is provided in the models folder. The full list of the model is shown as the run finished.  
 
-![automl_best_run](./media/)
+![automl_best_run](./media/automl-best-run-id.png)
 
 ![automl_best_model_details](./media/automl_best_model_details.png)
 
